@@ -1,43 +1,51 @@
 package com.thoughtworks.training.xueqing.todoservice.service;
 
+import com.thoughtworks.training.xueqing.todoservice.dto.User;
 import com.thoughtworks.training.xueqing.todoservice.model.Todo;
 import com.thoughtworks.training.xueqing.todoservice.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+
 @Service
 public class TodoService {
 
     private final TodoRepository todoRepository;
-    private final UserService userService;
-    @Autowired
-    public TodoService(TodoRepository todoRepository, UserService userService) {
-        this.todoRepository = todoRepository;
-        this.userService = userService;
-    }
 
+    //    private final UserService userService;
+    @Autowired
+    public TodoService(TodoRepository todoRepository) {
+        this.todoRepository = todoRepository;
+//        this.userService = userService;
+    }
 
 
     public List<Todo> findAll() {
         return todoRepository.findAll();
     }
 
-    public List<Todo> findAll(String name){
-        return todoRepository.findAllByUserIdEquals(userService.findByName(name).getId());
+    private Integer getLoggedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        return user.getId();
     }
 
-    public Todo save(Todo todo){
+    public List<Todo> findAllByUser() {
+        return todoRepository.findAllByUserIdEquals(getLoggedUserId());
+    }
+
+    public Todo save(Todo todo) {
         todo.setTime(new Date());
-        System.out.println("----"+ todo);
+        System.out.println("----" + todo);
         return todoRepository.save(todo);
     }
+
     public Todo findById(Integer id){
-        return todoRepository.findOne(id);
-    }
-    public Todo findById(Integer id, String name){
-        return todoRepository.findByIdEqualsAndUserIdEquals(id, userService.findByName(name).getId());
+        return todoRepository.findByIdEqualsAndUserIdEquals(id, getLoggedUserId());
     }
 
     public Todo update(Integer id, Todo newtodo) {
@@ -55,6 +63,7 @@ public class TodoService {
         todo.setCompleted(!todo.getCompleted());
         todoRepository.save(todo);
     }
+
     public void deleted(Integer id) {
         Todo todo = todoRepository.findOne(id);
         todo.setDeleted(!todo.getDeleted());

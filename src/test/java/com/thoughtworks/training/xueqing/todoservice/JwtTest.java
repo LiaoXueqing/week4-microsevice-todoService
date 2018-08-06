@@ -37,6 +37,7 @@ public class JwtTest {
                 .parseClaimsJws(token)
                 .getBody();
         assertThat(body.get("name"),is("xue"));
+        assertThat(body.get("role"),is("dev"));
     }
 
 }

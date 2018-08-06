@@ -22,18 +22,19 @@ public class TodoController {
     private TodoService todoService;
 
     @GetMapping
-    public List<Todo> getTodos(Principal user) {
-        return todoService.findAll(user.getName());
+    public List<Todo> getTodos() {
+        List<Todo> todoList = todoService.findAllByUser();
+        System.out.println(todoList);
+        return todoList;
     }
 
     @GetMapping("/{id}")
-    public Todo getOneById(@PathVariable Integer id, Principal user) {
-        return todoService.findById(id, user.getName());
+    public Todo getOneById(@PathVariable Integer id) {
+        return todoService.findById(id);
     }
 
     @PostMapping
     public Todo save(@RequestBody Todo todo) {
-        System.out.println("+++"+ todo);
         return todoService.save(todo);
     }
 

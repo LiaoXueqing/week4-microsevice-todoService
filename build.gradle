@@ -24,12 +24,15 @@ sourceCompatibility = 1.8
 repositories {
 	mavenCentral()
 }
-
+ext {
+	springCloudVersion = 'Edgware.SR4'
+}
 dependencies {
     compile('mysql:mysql-connector-java')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile ('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.cloud:spring-cloud-starter-feign')
 	compile 'javax.xml.bind:jaxb-api:2.3.0'
 	compile 'io.jsonwebtoken:jjwt:0.9.1'
 	compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
@@ -40,17 +43,22 @@ dependencies {
 	compile('org.flywaydb:flyway-core:5.0.7')
 	runtime('com.h2database:h2')
 }
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
 tasks.withType(Checkstyle) {
 	reports {
 		xml.enabled false
 		html.enabled true
-		html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
+//		html.stylesheet resources.text.fromFile('config/xsl/checkstyle-custom.xsl')
 	}
 }
 tasks.withType(FindBugs) {
 	reports {
 		xml.enabled false
 		html.enabled true
-		html.stylesheet resources.text.fromFile('config/xsl/findbugs-custom.xsl')
+//		html.stylesheet resources.text.fromFile('config/xsl/findbugs-custom.xsl')
 	}
 }

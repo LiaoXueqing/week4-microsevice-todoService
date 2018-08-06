@@ -4,6 +4,5 @@ CREATE table Todo(
     deleted BOOLEAN default false,
     completed BOOLEAN default false,
     time DATETIME default now(),
-    user_id INTEGER,
-    foreign key (user_id) references user(id)
+    user_id INTEGER
 );
