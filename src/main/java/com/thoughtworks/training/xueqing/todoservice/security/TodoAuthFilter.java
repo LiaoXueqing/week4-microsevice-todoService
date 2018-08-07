@@ -1,10 +1,7 @@
 package com.thoughtworks.training.xueqing.todoservice.security;
 
 import com.google.common.net.HttpHeaders;
-import com.thoughtworks.training.xueqing.todoservice.client.UserClient;
 import com.thoughtworks.training.xueqing.todoservice.dto.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -21,11 +18,6 @@ import java.util.Collections;
 @Component
 public class TodoAuthFilter extends OncePerRequestFilter {
 
-    @Value("${secretkey}")
-    private String secretKey;
-    @Autowired
-    private UserClient userClient;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -36,14 +28,14 @@ public class TodoAuthFilter extends OncePerRequestFilter {
 
         if (!StringUtils.isEmpty(token)) {
             try {
-                User user = userClient.verifyToken(token);
-                if(user!=null){
+                User user = fromToken(token);
+                if (user != null) {
                     SecurityContextHolder.getContext()
                             .setAuthentication(
                                     new UsernamePasswordAuthenticationToken(user,
                                             null,
                                             Collections.emptyList()));
-                }else{
+                } else {
                     System.out.println("not found user");
                 }
             } catch (Exception e) {
@@ -52,6 +44,11 @@ public class TodoAuthFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private User fromToken(String token) {
+        String[] userInfo = token.split(":");
+        return new User(Integer.valueOf(userInfo[0]), userInfo[1], "");
     }
 }
 

@@ -8,7 +8,6 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 @SpringBootApplication
 @EnableFeignClients
-@EnableZuulProxy
 public class TodoServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TodoServiceApplication.class, args);
