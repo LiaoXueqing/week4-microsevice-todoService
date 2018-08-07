@@ -3,10 +3,8 @@ package com.thoughtworks.training.xueqing.todoservice.security;
 import com.google.common.net.HttpHeaders;
 import com.thoughtworks.training.xueqing.todoservice.client.UserClient;
 import com.thoughtworks.training.xueqing.todoservice.dto.User;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -38,11 +36,8 @@ public class TodoAuthFilter extends OncePerRequestFilter {
 
         if (!StringUtils.isEmpty(token)) {
             try {
-                System.out.println(token);
                 User user = userClient.verifyToken(token);
-                System.out.println("------------------"+user);
                 if(user!=null){
-                    System.out.println("user="+user);
                     SecurityContextHolder.getContext()
                             .setAuthentication(
                                     new UsernamePasswordAuthenticationToken(user,

@@ -35,12 +35,14 @@ public class TodoService {
     }
 
     public List<Todo> findAllByUser() {
-        return todoRepository.findAllByUserIdEquals(getLoggedUserId());
+        Integer id = getLoggedUserId();
+        return todoRepository.findAllByUserIdEquals(id);
     }
 
     public Todo save(Todo todo) {
+        Integer id = getLoggedUserId();
+        todo.setUserId(id);
         todo.setTime(new Date());
-        System.out.println("----" + todo);
         return todoRepository.save(todo);
     }
 
