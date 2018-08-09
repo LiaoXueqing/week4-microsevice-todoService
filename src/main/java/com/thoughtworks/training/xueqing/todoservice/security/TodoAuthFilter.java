@@ -23,6 +23,7 @@ public class TodoAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
+        System.out.println("todo service---"+request);
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         request.getHeader(HttpHeaders.AUTHORIZATION);
 
