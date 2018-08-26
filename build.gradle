@@ -30,6 +30,8 @@ ext {
 dependencies {
 	compile('mysql:mysql-connector-java')
 	compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+	compile group:'org.springframework.retry', name: 'spring-retry'
+
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.projectlombok:lombok')
 	compile('org.flywaydb:flyway-core:5.0.7')
@@ -38,6 +40,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile 'org.languagetool:language-en:4.2'
 	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile ('com.google.guava:guava:21.0')
@@ -47,7 +50,13 @@ dependencies {
 	compile 'io.jsonwebtoken:jjwt:0.9.1'
 	runtime('com.h2database:h2')
 	compile('org.springframework.cloud:spring-cloud-starter-feign')
-	compile('org.springframework.cloud:spring-cloud-starter-consul-discovery')
+	compile('org.springframework.cloud:spring-cloud-starter-hystrix')
+	compile('org.springframework.cloud:spring-cloud-starter-config')
+
+	compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+	compile('org.springframework.cloud:spring-cloud-starter-config')
+
+//	compile('org.springframework.cloud:spring-cloud-starter-consul-discovery')
 	testCompile('org.springframework.security:spring-security-test')
 }
 dependencyManagement {

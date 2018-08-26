@@ -27,9 +27,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests()
+                .antMatchers("/hystrix*/**","/webjars/**","/*.stream/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
-                .antMatchers(HttpMethod.GET, "/health").permitAll()
+//                .antMatchers(HttpMethod.GET, "/health").permitAll()
+//                .antMatchers("/**").permitAll()
+
                 .anyRequest().authenticated()
                 .and().addFilterBefore(todofilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);

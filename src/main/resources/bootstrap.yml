@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: todo-service
+  cloud:
+    config:
+      fail-fast: false
+      uri: http://config-server:8099/

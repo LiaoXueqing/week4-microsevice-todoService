@@ -1,5 +1,6 @@
 package com.thoughtworks.training.xueqing.todoservice.controller;
 
+import com.thoughtworks.training.xueqing.todoservice.model.Task;
 import com.thoughtworks.training.xueqing.todoservice.model.Todo;
 import com.thoughtworks.training.xueqing.todoservice.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -24,7 +24,6 @@ public class TodoController {
     @GetMapping
     public List<Todo> getTodos() {
         List<Todo> todoList = todoService.findAllByUser();
-        System.out.println(todoList);
         return todoList;
     }
 
@@ -41,6 +40,10 @@ public class TodoController {
     @PutMapping("/{id}")
     public void update(@PathVariable Integer id, @RequestBody Todo todo) {
         todoService.update(id, todo);
+    }
+    @PutMapping("/addTask")
+    public Task update_addTask(@RequestBody Task task) {
+        return todoService.addTask(task);
     }
 
     @PutMapping("/completed/{id}")

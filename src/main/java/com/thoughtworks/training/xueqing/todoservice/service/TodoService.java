@@ -1,7 +1,9 @@
 package com.thoughtworks.training.xueqing.todoservice.service;
 
 import com.thoughtworks.training.xueqing.todoservice.dto.User;
+import com.thoughtworks.training.xueqing.todoservice.model.Task;
 import com.thoughtworks.training.xueqing.todoservice.model.Todo;
+import com.thoughtworks.training.xueqing.todoservice.repository.TaskRepository;
 import com.thoughtworks.training.xueqing.todoservice.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,12 +17,16 @@ import java.util.List;
 public class TodoService {
 
     private final TodoRepository todoRepository;
+    private final TaskRepository taskRepository;
 
-    //    private final UserService userService;
     @Autowired
-    public TodoService(TodoRepository todoRepository) {
+    private SpellCheckerService spellChecker;
+
+    @Autowired
+    public TodoService(TodoRepository todoRepository,TaskRepository taskRepository) {
+
         this.todoRepository = todoRepository;
-//        this.userService = userService;
+        this.taskRepository = taskRepository;
     }
 
 
@@ -36,7 +42,11 @@ public class TodoService {
 
     public List<Todo> findAllByUser() {
         Integer id = getLoggedUserId();
-        return todoRepository.findAllByUserIdEquals(id);
+        List<Todo> todos = todoRepository.findAllByUserIdEquals(id);
+        spellChecker.check(todos);
+//        spellChecker.check(todos, Todo::getName,Todo::setSuggestion);
+        return todos;
+
     }
 
     public Todo save(Todo todo) {
@@ -70,5 +80,11 @@ public class TodoService {
         Todo todo = todoRepository.findOne(id);
         todo.setDeleted(!todo.getDeleted());
         todoRepository.save(todo);
+    }
+
+    public Task addTask(Task task) {
+        taskRepository.save(task);
+        System.out.println("add task "+task);
+        return task;
     }
 }
